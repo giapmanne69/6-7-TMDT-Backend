@@ -17,5 +17,5 @@ logging:
 
 app:
   jwt:
-    secret: 256-bit-secret-string
+    secret: ${TMDT_JWT_SECRET}
     expiration: 86400000
