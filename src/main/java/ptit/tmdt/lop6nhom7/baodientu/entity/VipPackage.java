@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 
@@ -30,6 +31,11 @@ public class VipPackage {
   @NotNull
   @Column(name = "price", nullable = false, precision = 10, scale = 2)
   private BigDecimal price;
+
+  @NotNull
+  @ColumnDefault("0")
+  @Column(name = "discount_percent", nullable = false)
+  private Integer discountPercent = 0;
   
   @Column(name = "description")
   private String description;

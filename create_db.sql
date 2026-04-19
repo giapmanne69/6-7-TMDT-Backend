@@ -59,8 +59,12 @@ CREATE TABLE IF NOT EXISTS Vip_Packages
     name          VARCHAR(255)   NOT NULL,
     duration_days INT            NOT NULL,
     price         DECIMAL(10, 2) NOT NULL,
+    discount_percent INT         NOT NULL DEFAULT 0,
     description   TEXT           NULL
 );
+
+ALTER TABLE Vip_Packages
+    ADD COLUMN IF NOT EXISTS discount_percent INT NOT NULL DEFAULT 0;
 CREATE TABLE IF NOT EXISTS Transactions
 (
     id           INT AUTO_INCREMENT PRIMARY KEY,
