@@ -19,3 +19,16 @@ app:
   jwt:
     secret: ${TMDT_JWT_SECRET}
     expiration: 86400000
+
+vnpay:
+  tmn-code: TJZUNZ97
+  hash-secret: JH64A5OFI3570Y5A4A5R37PHUR604QF3
+  url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+  return-url: https://travel-accent-tinker.ngrok-free.dev/api/transactions/vnpay-return
+  ipn-url: https://travel-accent-tinker.ngrok-free.dev/api/transactions/vnpay-ipn
+  version: "2.1.0"
+  command: pay
+  order-type: other
+  curr-code: VND
+  locale: vn
+ 

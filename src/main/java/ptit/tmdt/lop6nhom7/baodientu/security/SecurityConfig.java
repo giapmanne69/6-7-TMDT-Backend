@@ -31,9 +31,11 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/auth/**").permitAll()
-                    .anyRequest().authenticated()
-                    
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/vip-packages/**").permitAll()
+                        .requestMatchers("/api/transactions/vnpay-return").permitAll()
+                        .requestMatchers("/api/transactions/vnpay-ipn").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) -> {
@@ -47,7 +49,7 @@ public class SecurityConfig {
                             response.setStatus(403);
                             response.getWriter().write(
                                     "{\"status\":403,\"message\":\"Access denied\"}");
-                }))
+                        }))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
@@ -68,11 +70,7 @@ public class SecurityConfig {
                 "Authorization",
                 "Content-Type"));
 
-        // Allow credentials — required for cookies (if you use HTTP-only cookie for
-        // JWT)
         config.setAllowCredentials(true);
-
-        // Cache preflight response for 1 hour — reduces OPTIONS requests
         config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -90,5 +88,4 @@ public class SecurityConfig {
             AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
 }

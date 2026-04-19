@@ -24,13 +24,13 @@ public class JwtService {
 
     public String generateToken(User user) {
         return Jwts.builder()
-                .setSubject(String.valueOf(user.getId()))
+                .subject(String.valueOf(user.getId()))
                 .claim("role", user.getRole().name())
                 .claim("email", user.getEmail())
                 .claim("vipExpiryDate", user.getVipExpiryDate().toString())
                 .claim("freeArticlesLeft", user.getFreeArticlesLeft())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSigningKey())
                 .compact();
     }
