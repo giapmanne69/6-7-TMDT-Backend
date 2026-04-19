@@ -6,9 +6,9 @@ spring:
     hibernate:
       ddl-auto: validate
   datasource:
-    url: ${TMDT_DB_URL} # update to ssl later to secure
-    username: ${TMDT_DB_USERNAME}
-    password: ${TMDT_DB_PASSWORD}
+    url: ${TMDT_DB_URL:jdbc:mysql://localhost:3306/pthttmdt?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh} # update to ssl later to secure
+    username: ${TMDT_DB_USERNAME:root}
+    password: ${TMDT_DB_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
   
 logging:
