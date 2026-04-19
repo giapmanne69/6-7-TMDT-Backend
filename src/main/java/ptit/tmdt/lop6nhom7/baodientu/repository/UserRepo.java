@@ -12,5 +12,6 @@ import java.util.Optional;
 public interface UserRepo extends JpaRepository<User, Integer> {
   Optional<User> findByEmail(@NotBlank(message = "Email khong duoc bo trong") @Email String email);
   
+  Optional<User> findById(Long id);
   boolean existsByEmail(@NotBlank(message = "Email khong duoc bo trong") @Email String email);
 }

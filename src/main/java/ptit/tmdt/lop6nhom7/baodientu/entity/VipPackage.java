@@ -3,14 +3,15 @@ package ptit.tmdt.lop6nhom7.baodientu.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
+import org.hibernate.annotations.ColumnDefault;
+
+@Data
 @Entity
 @Table(name = "vip_packages", schema = "pthttmdt")
 public class VipPackage {

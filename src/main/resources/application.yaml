@@ -6,9 +6,9 @@ spring:
     hibernate:
       ddl-auto: validate
   datasource:
-    url: ${TMDT_DB_URL} # update to ssl later to secure
-    username: ${TMDT_DB_USERNAME}
-    password: ${TMDT_DB_PASSWORD}
+    url: ${TMDT_DB_URL:jdbc:mysql://localhost:3306/pthttmdt?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh} # update to ssl later to secure
+    username: ${TMDT_DB_USERNAME:root}
+    password: ${TMDT_DB_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
   
 logging:
@@ -19,3 +19,16 @@ app:
   jwt:
     secret: ${TMDT_JWT_SECRET}
     expiration: 86400000
+
+vnpay:
+  tmn-code: TJZUNZ97
+  hash-secret: JH64A5OFI3570Y5A4A5R37PHUR604QF3
+  url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+  return-url: https://travel-accent-tinker.ngrok-free.dev/api/transactions/vnpay-return
+  ipn-url: https://travel-accent-tinker.ngrok-free.dev/api/transactions/vnpay-ipn
+  version: "2.1.0"
+  command: pay
+  order-type: other
+  curr-code: VND
+  locale: vn
+ 

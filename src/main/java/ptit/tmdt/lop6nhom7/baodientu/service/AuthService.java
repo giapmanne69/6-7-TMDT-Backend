@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import ptit.tmdt.lop6nhom7.baodientu.dto.LoginReq;
 import ptit.tmdt.lop6nhom7.baodientu.dto.LoginRes;
 import ptit.tmdt.lop6nhom7.baodientu.dto.RegisterReq;
@@ -24,6 +25,7 @@ import java.time.Instant;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class AuthService {
   private final UserRepo userRepo;
   private final PasswordEncoder passwordEncoder;
