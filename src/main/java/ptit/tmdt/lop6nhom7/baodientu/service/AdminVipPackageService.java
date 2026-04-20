@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ptit.tmdt.lop6nhom7.baodientu.dto.AdminVipPackageUpdateReq;
 import ptit.tmdt.lop6nhom7.baodientu.dto.VipPackageRes;
 import ptit.tmdt.lop6nhom7.baodientu.entity.VipPackage;
+import ptit.tmdt.lop6nhom7.baodientu.exception.ConflictException;
 import ptit.tmdt.lop6nhom7.baodientu.exception.NotFoundException;
 import ptit.tmdt.lop6nhom7.baodientu.repository.VipPackageRepo;
 
@@ -30,14 +31,57 @@ public class AdminVipPackageService {
   }
 
   @Transactional
-  public VipPackageRes updatePackage(Integer packageId, AdminVipPackageUpdateReq request) {
-    VipPackage vipPackage = findPackage(packageId);
-    vipPackage.setName(request.getName().trim());
+  public VipPackageRes createPackage(AdminVipPackageUpdateReq request) {
+    String packageName = request.getName().trim();
+
+    validateUniqueName(packageName, null);
+
+    VipPackage vipPackage = new VipPackage();
+    vipPackage.setName(packageName);
     vipPackage.setDurationDays(request.getDurationDays());
     vipPackage.setPrice(request.getPrice());
     vipPackage.setDiscountPercent(request.getDiscountPercent());
-    vipPackage.setDescription(request.getDescription() == null ? null : request.getDescription().trim());
+    vipPackage.setDescription(normalizeDescription(request.getDescription()));
     return toResponse(vipPackageRepo.save(vipPackage));
+  }
+
+  @Transactional
+  public VipPackageRes updatePackage(Integer packageId, AdminVipPackageUpdateReq request) {
+    VipPackage vipPackage = findPackage(packageId);
+    String packageName = request.getName().trim();
+
+    validateUniqueName(packageName, packageId);
+
+    vipPackage.setName(packageName);
+    vipPackage.setDurationDays(request.getDurationDays());
+    vipPackage.setPrice(request.getPrice());
+    vipPackage.setDiscountPercent(request.getDiscountPercent());
+    vipPackage.setDescription(normalizeDescription(request.getDescription()));
+    return toResponse(vipPackageRepo.save(vipPackage));
+  }
+
+  private void validateUniqueName(String packageName, Integer currentPackageId) {
+    if (!vipPackageRepo.existsByNameIgnoreCase(packageName)) {
+      return;
+    }
+
+    if (currentPackageId != null) {
+      VipPackage currentPackage = findPackage(currentPackageId);
+      if (currentPackage.getName().equalsIgnoreCase(packageName)) {
+        return;
+      }
+    }
+
+    throw new ConflictException("Ten goi VIP da ton tai");
+  }
+
+  private String normalizeDescription(String description) {
+    if (description == null) {
+      return null;
+    }
+
+    String normalizedDescription = description.trim();
+    return normalizedDescription.isEmpty() ? null : normalizedDescription;
   }
 
   private VipPackage findPackage(Integer packageId) {

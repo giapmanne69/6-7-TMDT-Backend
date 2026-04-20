@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,11 @@ public class AdminVipPackageController {
   @GetMapping("/{id}")
   public VipPackageRes getPackageById(@PathVariable Integer id) {
     return adminVipPackageService.getPackageById(id);
+  }
+
+  @PostMapping
+  public VipPackageRes createPackage(@RequestBody @Valid AdminVipPackageUpdateReq request) {
+    return adminVipPackageService.createPackage(request);
   }
 
   @PutMapping("/{id}")

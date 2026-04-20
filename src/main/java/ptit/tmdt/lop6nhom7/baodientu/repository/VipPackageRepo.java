@@ -6,4 +6,5 @@ import ptit.tmdt.lop6nhom7.baodientu.entity.VipPackage;
 
 @Repository
 public interface VipPackageRepo extends JpaRepository<VipPackage, Integer> {
+  boolean existsByNameIgnoreCase(String name);
 }
