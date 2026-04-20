@@ -14,4 +14,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Integer> {
 
     /** Lấy lịch sử giao dịch của một user, mới nhất trước. */
     List<Transaction> findByUserOrderByCreatedAtDesc(User user);
+
+    /** Kiểm tra có giao dịch nào tham chiếu đến gói VIP theo id không. */
+    boolean existsByPackageFieldId(Integer packageId);
 }

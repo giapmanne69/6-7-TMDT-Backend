@@ -7,6 +7,7 @@ import ptit.tmdt.lop6nhom7.baodientu.dto.AdminVipPackageUpdateReq;
 import ptit.tmdt.lop6nhom7.baodientu.dto.VipPackageRes;
 import ptit.tmdt.lop6nhom7.baodientu.entity.VipPackage;
 import ptit.tmdt.lop6nhom7.baodientu.exception.NotFoundException;
+import ptit.tmdt.lop6nhom7.baodientu.repository.TransactionRepo;
 import ptit.tmdt.lop6nhom7.baodientu.repository.VipPackageRepo;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminVipPackageService {
   private final VipPackageRepo vipPackageRepo;
+  private final TransactionRepo transactionRepo;
 
   @Transactional(readOnly = true)
   public List<VipPackageRes> getAllPackages() {
@@ -30,6 +32,17 @@ public class AdminVipPackageService {
   }
 
   @Transactional
+  public VipPackageRes createPackage(AdminVipPackageUpdateReq request) {
+    VipPackage vipPackage = new VipPackage();
+    vipPackage.setName(request.getName().trim());
+    vipPackage.setDurationDays(request.getDurationDays());
+    vipPackage.setPrice(request.getPrice());
+    vipPackage.setDiscountPercent(request.getDiscountPercent());
+    vipPackage.setDescription(request.getDescription() == null ? null : request.getDescription().trim());
+    return toResponse(vipPackageRepo.save(vipPackage));
+  }
+
+  @Transactional
   public VipPackageRes updatePackage(Integer packageId, AdminVipPackageUpdateReq request) {
     VipPackage vipPackage = findPackage(packageId);
     vipPackage.setName(request.getName().trim());
@@ -38,6 +51,15 @@ public class AdminVipPackageService {
     vipPackage.setDiscountPercent(request.getDiscountPercent());
     vipPackage.setDescription(request.getDescription() == null ? null : request.getDescription().trim());
     return toResponse(vipPackageRepo.save(vipPackage));
+  }
+
+  @Transactional
+  public void deletePackage(Integer packageId) {
+    VipPackage vipPackage = findPackage(packageId);
+    if (transactionRepo.existsByPackageFieldId(packageId)) {
+      throw new IllegalStateException("Khong the xoa goi VIP da co giao dich lien ket");
+    }
+    vipPackageRepo.delete(vipPackage);
   }
 
   private VipPackage findPackage(Integer packageId) {
