@@ -3,6 +3,7 @@ package ptit.tmdt.lop6nhom7.baodientu.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,5 +45,10 @@ public class AdminVipPackageController {
       @RequestBody @Valid AdminVipPackageUpdateReq request
   ) {
     return adminVipPackageService.updatePackage(id, request);
+  }
+
+  @DeleteMapping("/{id}")
+  public void deletePackage(@PathVariable Integer id) {
+    adminVipPackageService.deletePackage(id);
   }
 }

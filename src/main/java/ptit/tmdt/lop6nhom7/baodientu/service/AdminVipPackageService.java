@@ -8,6 +8,7 @@ import ptit.tmdt.lop6nhom7.baodientu.dto.VipPackageRes;
 import ptit.tmdt.lop6nhom7.baodientu.entity.VipPackage;
 import ptit.tmdt.lop6nhom7.baodientu.exception.ConflictException;
 import ptit.tmdt.lop6nhom7.baodientu.exception.NotFoundException;
+import ptit.tmdt.lop6nhom7.baodientu.repository.TransactionRepo;
 import ptit.tmdt.lop6nhom7.baodientu.repository.VipPackageRepo;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminVipPackageService {
   private final VipPackageRepo vipPackageRepo;
+  private final TransactionRepo transactionRepo;
 
   @Transactional(readOnly = true)
   public List<VipPackageRes> getAllPackages() {
@@ -58,6 +60,17 @@ public class AdminVipPackageService {
     vipPackage.setDiscountPercent(request.getDiscountPercent());
     vipPackage.setDescription(normalizeDescription(request.getDescription()));
     return toResponse(vipPackageRepo.save(vipPackage));
+  }
+
+  @Transactional
+  public void deletePackage(Integer packageId) {
+    VipPackage vipPackage = findPackage(packageId);
+
+    if (transactionRepo.existsByPackageFieldId(packageId)) {
+      throw new ConflictException("Khong the xoa goi VIP da co giao dich");
+    }
+
+    vipPackageRepo.delete(vipPackage);
   }
 
   private void validateUniqueName(String packageName, Integer currentPackageId) {
